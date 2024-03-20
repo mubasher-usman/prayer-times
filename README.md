@@ -1,6 +1,6 @@
 [![CI](https://github.com/mubasher-usman/prayer-times/actions/workflows/maven.yml/badge.svg?branch=master)](https://github.com/mubasher-usman/prayer-times/actions/workflows/maven.yml)
-[![Releases](https://img.shields.io/github/v/release/mubasaher-usman/prayer-times)](https://github.com/mubasher-usman/prayer-times/releases)
-![](https://img.shields.io/packagist/dt/islamic-network/prayer-times.svg)
+![GitHub Release](https://img.shields.io/github/v/release/mubasher-usman/prayer-times)
+
 
 
 ## Prayer Times Library (Java)
@@ -45,7 +45,7 @@ Map<DayTimeNames,Object> times = prayerTimes.computeTimes();
 
 ## Methods
 
-Supported methods can be seen @ https://github.com/mubasher-usman/prayer-times/blob/master/src/main/org/mubasherusman/prayertimes/constants/Method.java#L10.
+Supported methods can be seen @ https://github.com/mubasher-usman/prayer-times/blob/master/src/main/java/org/mubasherusman/prayertimes/constants/Method.java#L12.
 
 ### Understanding Methods
 
@@ -57,7 +57,10 @@ Compare the results produced by this library against the original JS version.
 
 ## Contributors
 
-Hamid Zarrabi-Zadeh, Hussain Ali Khan, Meezaan-ud-Din Abdu Dhil-Jalali Wal-Ikram
+ * Hamid Zarrabi-Zadeh
+ * Hussain Ali Khan
+ * Mubasher Usman
+ * Meezaan-ud-Din Abdu Dhil-Jalali Wal-Ikram
 
 ## License
 

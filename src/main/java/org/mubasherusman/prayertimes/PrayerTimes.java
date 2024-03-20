@@ -76,9 +76,6 @@ import static org.mubasherusman.prayertimes.utils.SunPosHelper.sunRiseAngle;
  * Asar Shadow Factor. It Will override the default Shadow factors instructed by Fiqh.
  * Normally, You do not need to provide Asar Shadow Factor.
 
- * Original Authors: Hamid Zarrabi-Zadeh
- * Credit: Php Port (Meezaan-ud-Din Abdu Dhil-Jalali Wal-Ikram). Java Port v1 (Hussain Ali Khan)
-
  * @author Mubasher Usman (mian.mubasherusman@gmail.com)
  */
 public class PrayerTimes {
@@ -112,24 +109,24 @@ public class PrayerTimes {
                 () -> ZonedDateTime.now(ZoneId.of(
                         Objects.requireNonNull(builder.timeZone, "Time Zone required"))));
         setMethod(builder);
-        if(builder.fiqh!=null) this.fiqh = builder.fiqh;
-        this.asrShadowFactor = Objects.requireNonNullElseGet(builder.asarShadowFactor, this.fiqh::getId);
+        if(builder.fiqh!=null) fiqh = builder.fiqh;
+        asrShadowFactor = Objects.requireNonNullElseGet(builder.asarShadowFactor, fiqh::getId);
         loadSettings();
-        this.latitude = builder.latitude;
-        this.longitude = builder.longitude;
-        this.elevation = builder.elevation == null ? 0 : 1 * elevation;
-        this.julianDate = DateUtils.getJulianDate(date.getYear(), date.getMonthValue(), date.getDayOfMonth()) - longitude / (15.0 * 24.0);
-        if(builder.midnightMode!=null) this.midnightMode = builder.midnightMode;
-        if(builder.shafaqMethod!=null) this.shafaqMethod = builder.shafaqMethod;
-        if(builder.timeFormat!=null) this.timeFormat = builder.timeFormat;
-        if(builder.latitudeAdjustmentMethod!=null) this.latitudeAdjustmentMethod = builder.latitudeAdjustmentMethod;
-        if(builder.offset!=null) this.offset = builder.offset;
+        latitude = builder.latitude;
+        longitude = builder.longitude;
+        elevation = builder.elevation == null ? 0 : 1 * elevation;
+        julianDate = DateUtils.getJulianDate(date.getYear(), date.getMonthValue(), date.getDayOfMonth()) - longitude / (15.0 * 24.0);
+        if(builder.midnightMode!=null) midnightMode = builder.midnightMode;
+        if(builder.shafaqMethod!=null) shafaqMethod = builder.shafaqMethod;
+        if(builder.timeFormat!=null) timeFormat = builder.timeFormat;
+        if(builder.latitudeAdjustmentMethod!=null) latitudeAdjustmentMethod = builder.latitudeAdjustmentMethod;
+        if(builder.offset!=null) offset = builder.offset;
     }
 
     private void setMethod(Builder builder) {
         if(builder.method!=null) {
-            this.method = builder.method;
-            if(this.method==CUSTOM) {
+            method = builder.method;
+            if(method==CUSTOM) {
                 customMethodParams = method.getParams();
                 customMethodParams.put(FAJR, builder.fajarAngle);
                 customMethodParams.put(MAGHRIB, builder.maghribAngleOrMin);
@@ -139,17 +136,17 @@ public class PrayerTimes {
     }
 
     private void loadSettings() {
-        this.settings = new HashMap<>();
+        settings = new HashMap<>();
         Map<TimeName,Object> params = method.equals(Method.CUSTOM)? customMethodParams : method.getParams();
-        this.settings.put(IMSAK, params.get(IMSAK) != null ? params.get(IMSAK) : "10 min");
-        this.settings.put(FAJR, params.get(FAJR) != null ? params.get(FAJR) : 0.0);
-        this.settings.put(ZHUHR, params.get(ZHUHR) != null ? params.get(ZHUHR) : "0 min");
-        this.settings.put(ISHA, params.get(ISHA) != null ? params.get(ISHA) : 0.0);
-        this.settings.put(MAGHRIB, params.get(MAGHRIB) != null ? params.get(MAGHRIB) : "0 min");
+        settings.put(IMSAK, params.get(IMSAK) != null ? params.get(IMSAK) : "10 min");
+        settings.put(FAJR, params.get(FAJR) != null ? params.get(FAJR) : 0.0);
+        settings.put(ZHUHR, params.get(ZHUHR) != null ? params.get(ZHUHR) : "0 min");
+        settings.put(ISHA, params.get(ISHA) != null ? params.get(ISHA) : 0.0);
+        settings.put(MAGHRIB, params.get(MAGHRIB) != null ? params.get(MAGHRIB) : "0 min");
         
         // Pick up methods midnightMode
         if (params.get(MIDNIGHT) != null) {
-            this.midnightMode = (MidNightMode) params.get(MIDNIGHT);
+            midnightMode = (MidNightMode) params.get(MIDNIGHT);
         }
     }
 
@@ -181,7 +178,7 @@ public class PrayerTimes {
         times.put(LAST_THIRD, times.get(SUNSET) + 2 * (diff / 3));
 
         // If our method is Moon sighting, reset the Fajr and Isha times
-        if (Objects.equals(method, MOONSIGHTING)) {
+        if(Objects.equals(method, MOONSIGHTING)) {
             moonSightingRecalculation(times);
         }
 
