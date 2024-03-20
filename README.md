@@ -1,6 +1,7 @@
-[![CI](https://cairo.mamluk.net/api/v1/teams/islamic-network/pipelines/prayer-times/badge)](https://cairo.mamluk.net/teams/islamic-network/pipelines/prayer-times)
-[![Releases](https://img.shields.io/github/v/release/islamic-network/prayer-times)](https://github.com/mubasher-usman/prayer-times/releases)
+[![CI](https://github.com/mubasher-usman/prayer-times/actions/workflows/maven.yml/badge.svg?branch=master)](https://github.com/mubasher-usman/prayer-times/actions/workflows/maven.yml)
+[![Releases](https://img.shields.io/github/v/release/mubasaher-usman/prayer-times)](https://github.com/mubasher-usman/prayer-times/releases)
 ![](https://img.shields.io/packagist/dt/islamic-network/prayer-times.svg)
+
 
 ## Prayer Times Library (Java)
 
