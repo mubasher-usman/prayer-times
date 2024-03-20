@@ -1,6 +1,6 @@
-package org.mubasherusman.prayertimes.constants;
+package io.mubasherusman.prayertimes.constants;
 
-import org.mubasherusman.prayertimes.moonsighting.ShafaqMethod;
+import io.mubasherusman.prayertimes.moonsighting.ShafaqMethod;
 
 import java.util.HashMap;
 import java.util.Map;

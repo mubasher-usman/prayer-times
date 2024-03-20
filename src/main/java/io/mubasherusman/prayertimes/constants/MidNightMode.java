@@ -1,4 +1,4 @@
-package org.mubasherusman.prayertimes.constants;
+package io.mubasherusman.prayertimes.constants;
 
 /**
  * Midnight Mode - how the midnight time is determined

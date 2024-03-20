@@ -1,4 +1,4 @@
-package org.mubasherusman.prayertimes.moonsighting;
+package io.mubasherusman.prayertimes.moonsighting;
 
 public enum ShafaqMethod {
     AHMER,ABYAD,GENERAL

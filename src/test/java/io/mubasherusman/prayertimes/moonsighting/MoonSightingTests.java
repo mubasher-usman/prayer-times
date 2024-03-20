@@ -1,10 +1,7 @@
-package org.mubasherusman.moonsighting;
+package io.mubasherusman.prayertimes.moonsighting;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.mubasherusman.prayertimes.moonsighting.Fajr;
-import org.mubasherusman.prayertimes.moonsighting.Isha;
-import org.mubasherusman.prayertimes.moonsighting.ShafaqMethod;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;

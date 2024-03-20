@@ -1,4 +1,4 @@
-package org.mubasherusman.prayertimes.utils;
+package io.mubasherusman.prayertimes.utils;
 
 /**
  * Helper class for common utility methods

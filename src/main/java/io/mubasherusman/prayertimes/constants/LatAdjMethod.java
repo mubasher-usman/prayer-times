@@ -1,4 +1,4 @@
-package org.mubasherusman.prayertimes.constants;
+package io.mubasherusman.prayertimes.constants;
 
 public enum LatAdjMethod {
     MIDDLE_OF_THE_NIGHT,

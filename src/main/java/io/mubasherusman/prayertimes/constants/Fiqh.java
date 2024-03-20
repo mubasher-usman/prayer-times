@@ -1,4 +1,4 @@
-package org.mubasherusman.prayertimes.constants;
+package io.mubasherusman.prayertimes.constants;
 
 /**
  * This is the school of thought or Islamic jurisprudence to determine

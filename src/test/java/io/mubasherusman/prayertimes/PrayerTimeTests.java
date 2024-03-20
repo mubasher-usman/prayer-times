@@ -1,14 +1,14 @@
-package org.mubasherusman.prayertimes;
+package io.mubasherusman.prayertimes;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.mubasherusman.prayertimes.constants.Fiqh;
-import org.mubasherusman.prayertimes.constants.MidNightMode;
-import org.mubasherusman.prayertimes.moonsighting.ShafaqMethod;
-import org.mubasherusman.prayertimes.constants.TimeName;
-import org.mubasherusman.prayertimes.constants.LatAdjMethod;
-import org.mubasherusman.prayertimes.constants.Method;
-import org.mubasherusman.prayertimes.constants.TimeFormat;
+import io.mubasherusman.prayertimes.constants.Fiqh;
+import io.mubasherusman.prayertimes.constants.MidNightMode;
+import io.mubasherusman.prayertimes.moonsighting.ShafaqMethod;
+import io.mubasherusman.prayertimes.constants.TimeName;
+import io.mubasherusman.prayertimes.constants.LatAdjMethod;
+import io.mubasherusman.prayertimes.constants.Method;
+import io.mubasherusman.prayertimes.constants.TimeFormat;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;

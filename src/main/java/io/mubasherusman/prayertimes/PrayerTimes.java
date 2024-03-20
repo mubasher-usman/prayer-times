@@ -25,20 +25,21 @@
  * PLEASE DO NOT REMOVE THIS COPYRIGHT BLOCK.
 
  */
-package org.mubasherusman.prayertimes;
+package io.mubasherusman.prayertimes;
 
-import org.mubasherusman.prayertimes.moonsighting.Fajr;
-import org.mubasherusman.prayertimes.moonsighting.Isha;
-import org.mubasherusman.prayertimes.moonsighting.ShafaqMethod;
-import org.mubasherusman.prayertimes.constants.TimeName;
-import org.mubasherusman.prayertimes.constants.Fiqh;
-import org.mubasherusman.prayertimes.constants.LatAdjMethod;
-import org.mubasherusman.prayertimes.constants.Method;
-import org.mubasherusman.prayertimes.constants.MidNightMode;
-import org.mubasherusman.prayertimes.constants.TimeFormat;
-import org.mubasherusman.prayertimes.utils.CommonUtils;
-import org.mubasherusman.prayertimes.utils.DateUtils;
-import org.mubasherusman.prayertimes.utils.Trigonometry;
+import io.mubasherusman.prayertimes.constants.Method;
+import io.mubasherusman.prayertimes.constants.MidNightMode;
+import io.mubasherusman.prayertimes.constants.TimeFormat;
+import io.mubasherusman.prayertimes.constants.TimeName;
+import io.mubasherusman.prayertimes.moonsighting.Fajr;
+import io.mubasherusman.prayertimes.moonsighting.Isha;
+import io.mubasherusman.prayertimes.moonsighting.ShafaqMethod;
+import io.mubasherusman.prayertimes.utils.DateUtils;
+import io.mubasherusman.prayertimes.utils.SunPosHelper;
+import io.mubasherusman.prayertimes.utils.Trigonometry;
+import io.mubasherusman.prayertimes.constants.Fiqh;
+import io.mubasherusman.prayertimes.constants.LatAdjMethod;
+import io.mubasherusman.prayertimes.utils.CommonUtils;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -49,22 +50,13 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
-import static org.mubasherusman.prayertimes.constants.TimeName.*;
-import static org.mubasherusman.prayertimes.constants.LatAdjMethod.ANGLE_BASED;
-import static org.mubasherusman.prayertimes.constants.LatAdjMethod.NONE;
-import static org.mubasherusman.prayertimes.constants.LatAdjMethod.ONE_SEVENTH;
-import static org.mubasherusman.prayertimes.constants.Method.CUSTOM;
-import static org.mubasherusman.prayertimes.constants.Method.MOONSIGHTING;
-import static org.mubasherusman.prayertimes.constants.MidNightMode.JAFARI;
-import static org.mubasherusman.prayertimes.constants.MidNightMode.STANDARD;
-import static org.mubasherusman.prayertimes.constants.SunProperty.DECLINATION;
-import static org.mubasherusman.prayertimes.constants.SunProperty.EQUATION_OF_TIME;
-import static org.mubasherusman.prayertimes.constants.TimeFormat.*;
-import static org.mubasherusman.prayertimes.utils.CommonUtils.evaluate;
-import static org.mubasherusman.prayertimes.utils.CommonUtils.twoDigitsFormat;
-import static org.mubasherusman.prayertimes.utils.DateUtils.timeDiff;
-import static org.mubasherusman.prayertimes.utils.SunPosHelper.sunPosition;
-import static org.mubasherusman.prayertimes.utils.SunPosHelper.sunRiseAngle;
+import static io.mubasherusman.prayertimes.constants.LatAdjMethod.ANGLE_BASED;
+import static io.mubasherusman.prayertimes.constants.LatAdjMethod.NONE;
+import static io.mubasherusman.prayertimes.constants.LatAdjMethod.ONE_SEVENTH;
+import static io.mubasherusman.prayertimes.constants.SunProperty.DECLINATION;
+import static io.mubasherusman.prayertimes.constants.SunProperty.EQUATION_OF_TIME;
+import static io.mubasherusman.prayertimes.utils.CommonUtils.evaluate;
+import static io.mubasherusman.prayertimes.utils.CommonUtils.twoDigitsFormat;
 
 /**
  * PrayerTimes Class will calculate prayer times of current or any given date.
@@ -91,9 +83,9 @@ public class PrayerTimes {
     private Method method = Method.MWL;
     private Fiqh fiqh = Fiqh.STANDARD;
     private LatAdjMethod latitudeAdjustmentMethod = ANGLE_BASED;
-    private TimeFormat timeFormat = H24;
+    private TimeFormat timeFormat = TimeFormat.H24;
     private ShafaqMethod shafaqMethod = ShafaqMethod.GENERAL;
-    private MidNightMode midnightMode = STANDARD;
+    private MidNightMode midnightMode = MidNightMode.STANDARD;
     private Double elevation;
     private Map<TimeName, Integer> offset;
     private Map<TimeName, Object> customMethodParams;
@@ -126,11 +118,11 @@ public class PrayerTimes {
     private void setMethod(Builder builder) {
         if(builder.method!=null) {
             method = builder.method;
-            if(method==CUSTOM) {
+            if(method== Method.CUSTOM) {
                 customMethodParams = method.getParams();
-                customMethodParams.put(FAJR, builder.fajarAngle);
-                customMethodParams.put(MAGHRIB, builder.maghribAngleOrMin);
-                customMethodParams.put(ISHA, builder.eshaAngleOrMin);
+                customMethodParams.put(TimeName.FAJR, builder.fajarAngle);
+                customMethodParams.put(TimeName.MAGHRIB, builder.maghribAngleOrMin);
+                customMethodParams.put(TimeName.ISHA, builder.eshaAngleOrMin);
             }
         }
     }
@@ -138,15 +130,15 @@ public class PrayerTimes {
     private void loadSettings() {
         settings = new HashMap<>();
         Map<TimeName,Object> params = method.equals(Method.CUSTOM)? customMethodParams : method.getParams();
-        settings.put(IMSAK, params.get(IMSAK) != null ? params.get(IMSAK) : "10 min");
-        settings.put(FAJR, params.get(FAJR) != null ? params.get(FAJR) : 0.0);
-        settings.put(ZHUHR, params.get(ZHUHR) != null ? params.get(ZHUHR) : "0 min");
-        settings.put(ISHA, params.get(ISHA) != null ? params.get(ISHA) : 0.0);
-        settings.put(MAGHRIB, params.get(MAGHRIB) != null ? params.get(MAGHRIB) : "0 min");
+        settings.put(TimeName.IMSAK, params.get(TimeName.IMSAK) != null ? params.get(TimeName.IMSAK) : "10 min");
+        settings.put(TimeName.FAJR, params.get(TimeName.FAJR) != null ? params.get(TimeName.FAJR) : 0.0);
+        settings.put(TimeName.ZHUHR, params.get(TimeName.ZHUHR) != null ? params.get(TimeName.ZHUHR) : "0 min");
+        settings.put(TimeName.ISHA, params.get(TimeName.ISHA) != null ? params.get(TimeName.ISHA) : 0.0);
+        settings.put(TimeName.MAGHRIB, params.get(TimeName.MAGHRIB) != null ? params.get(TimeName.MAGHRIB) : "0 min");
         
         // Pick up methods midnightMode
-        if (params.get(MIDNIGHT) != null) {
-            midnightMode = (MidNightMode) params.get(MIDNIGHT);
+        if (params.get(TimeName.MIDNIGHT) != null) {
+            midnightMode = (MidNightMode) params.get(TimeName.MIDNIGHT);
         }
     }
 
@@ -157,28 +149,28 @@ public class PrayerTimes {
     public Map<TimeName, Object> computeTimes() {
         // default times
         Map<TimeName, Double> times = new LinkedHashMap<>(){{
-            put(IMSAK, 5.0);
-            put(FAJR, 5.0);
-            put(SUNRISE, 6.0);
-            put(ZHUHR, 12.0);
-            put(ASR, 13.0);
-            put(SUNSET, 18.0);
-            put(MAGHRIB, 18.0);
-            put(ISHA, 18.0);
+            put(TimeName.IMSAK, 5.0);
+            put(TimeName.FAJR, 5.0);
+            put(TimeName.SUNRISE, 6.0);
+            put(TimeName.ZHUHR, 12.0);
+            put(TimeName.ASR, 13.0);
+            put(TimeName.SUNSET, 18.0);
+            put(TimeName.MAGHRIB, 18.0);
+            put(TimeName.ISHA, 18.0);
         }};
         computePrayerTimes(times);
         adjustTimes(times);
 
         // add nighttime's
-        double diff = (Objects.equals(midnightMode, JAFARI)) ?
-                timeDiff(times.get(SUNSET), times.get(FAJR)) :
-                timeDiff(times.get(SUNSET), times.get(SUNRISE));
-        times.put(MIDNIGHT, times.get(SUNSET) + diff / 2);
-        times.put(FIRST_THIRD, times.get(SUNSET) + diff / 3);
-        times.put(LAST_THIRD, times.get(SUNSET) + 2 * (diff / 3));
+        double diff = (Objects.equals(midnightMode, MidNightMode.JAFARI)) ?
+                DateUtils.timeDiff(times.get(TimeName.SUNSET), times.get(TimeName.FAJR)) :
+                DateUtils.timeDiff(times.get(TimeName.SUNSET), times.get(TimeName.SUNRISE));
+        times.put(TimeName.MIDNIGHT, times.get(TimeName.SUNSET) + diff / 2);
+        times.put(TimeName.FIRST_THIRD, times.get(TimeName.SUNSET) + diff / 3);
+        times.put(TimeName.LAST_THIRD, times.get(TimeName.SUNSET) + 2 * (diff / 3));
 
         // If our method is Moon sighting, reset the Fajr and Isha times
-        if(Objects.equals(method, MOONSIGHTING)) {
+        if(Objects.equals(method, Method.MOONSIGHTING)) {
             moonSightingRecalculation(times);
         }
 
@@ -192,14 +184,14 @@ public class PrayerTimes {
      */
     private void computePrayerTimes(Map<TimeName, Double> times) {
         dayPortion(times);
-        times.put(IMSAK, sunAngleTime(evaluate(settings.get(IMSAK)), times.get(IMSAK), "ccw"));
-        times.put(SUNRISE, sunAngleTime(sunRiseAngle(elevation), times.get(SUNRISE), "ccw"));
-        times.put(FAJR, sunAngleTime(evaluate(settings.get(FAJR)), times.get(FAJR), "ccw"));
-        times.put(ZHUHR, midDay(times.get(ZHUHR)));
-        times.put(ASR, asrTime(asrShadowFactor, times.get(ASR)));
-        times.put(SUNSET, sunAngleTime(sunRiseAngle(elevation), times.get(SUNSET)));
-        times.put(MAGHRIB, sunAngleTime(evaluate(settings.get(MAGHRIB)), times.get(MAGHRIB)));
-        times.put(ISHA, sunAngleTime(evaluate(settings.get(ISHA)), times.get(ISHA)));
+        times.put(TimeName.IMSAK, sunAngleTime(evaluate(settings.get(TimeName.IMSAK)), times.get(TimeName.IMSAK), "ccw"));
+        times.put(TimeName.SUNRISE, sunAngleTime(SunPosHelper.sunRiseAngle(elevation), times.get(TimeName.SUNRISE), "ccw"));
+        times.put(TimeName.FAJR, sunAngleTime(evaluate(settings.get(TimeName.FAJR)), times.get(TimeName.FAJR), "ccw"));
+        times.put(TimeName.ZHUHR, midDay(times.get(TimeName.ZHUHR)));
+        times.put(TimeName.ASR, asrTime(asrShadowFactor, times.get(TimeName.ASR)));
+        times.put(TimeName.SUNSET, sunAngleTime(SunPosHelper.sunRiseAngle(elevation), times.get(TimeName.SUNSET)));
+        times.put(TimeName.MAGHRIB, sunAngleTime(evaluate(settings.get(TimeName.MAGHRIB)), times.get(TimeName.MAGHRIB)));
+        times.put(TimeName.ISHA, sunAngleTime(evaluate(settings.get(TimeName.ISHA)), times.get(TimeName.ISHA)));
     }
 
     /**
@@ -216,16 +208,16 @@ public class PrayerTimes {
         if (!latitudeAdjustmentMethod.equals(NONE)) {
             adjustHighLatitudes(times);
         }
-        if (CommonUtils.containsMin(settings.get(IMSAK))) {
-            times.put(IMSAK, times.get(FAJR) - evaluate(settings.get(IMSAK)) / 60);
+        if (CommonUtils.containsMin(settings.get(TimeName.IMSAK))) {
+            times.put(TimeName.IMSAK, times.get(TimeName.FAJR) - evaluate(settings.get(TimeName.IMSAK)) / 60);
         }
-        if (CommonUtils.containsMin(settings.get(MAGHRIB))) {
-            times.put(MAGHRIB, times.get(SUNSET) + evaluate(settings.get(MAGHRIB)) / 60);
+        if (CommonUtils.containsMin(settings.get(TimeName.MAGHRIB))) {
+            times.put(TimeName.MAGHRIB, times.get(TimeName.SUNSET) + evaluate(settings.get(TimeName.MAGHRIB)) / 60);
         }
-        if (CommonUtils.containsMin(settings.get(ISHA))) {
-            times.put(ISHA, times.get(MAGHRIB) + evaluate(settings.get(ISHA)) / 60);
+        if (CommonUtils.containsMin(settings.get(TimeName.ISHA))) {
+            times.put(TimeName.ISHA, times.get(TimeName.MAGHRIB) + evaluate(settings.get(TimeName.ISHA)) / 60);
         }
-        times.put(ZHUHR, times.get(ZHUHR) + evaluate(settings.get(ZHUHR)) / 60);
+        times.put(TimeName.ZHUHR, times.get(TimeName.ZHUHR) + evaluate(settings.get(TimeName.ZHUHR)) / 60);
     }
 
     /**
@@ -235,16 +227,16 @@ public class PrayerTimes {
     private void moonSightingRecalculation(Map<TimeName, Double> times) {
         // Reset Fajr
         Fajr fajrMS = new Fajr(date, latitude);
-        times.put(FAJR, times.get(SUNRISE) - (fajrMS.getMinutesBeforeSunrise() / 60));
+        times.put(TimeName.FAJR, times.get(TimeName.SUNRISE) - (fajrMS.getMinutesBeforeSunrise() / 60));
 
         // Fajr has changed, also reset Imsak
-        if (CommonUtils.containsMin(settings.get(IMSAK))) {
-            times.put(IMSAK, times.get(FAJR) - evaluate(settings.get(IMSAK)) / 60);
+        if (CommonUtils.containsMin(settings.get(TimeName.IMSAK))) {
+            times.put(TimeName.IMSAK, times.get(TimeName.FAJR) - evaluate(settings.get(TimeName.IMSAK)) / 60);
         }
 
         // Reset Isha
         Isha ishaMS = new Isha(date, latitude, shafaqMethod);
-        times.put(ISHA, times.get(SUNSET) + (ishaMS.getMinutesAfterSunset() / 60));
+        times.put(TimeName.ISHA, times.get(TimeName.SUNSET) + (ishaMS.getMinutesAfterSunset() / 60));
     }
 
     /**
@@ -285,21 +277,21 @@ public class PrayerTimes {
         if (Double.isNaN(time)) {
             return INVALID_TIME;
         }
-        if (timeFormat.equals(DECIMAL)) {
+        if (timeFormat.equals(TimeFormat.DECIMAL)) {
             return time;
         }
         String[] suffixes = {"AM", "PM"};
         time = Trigonometry.fixHour(time + 0.5 / 60);  // add 0.5 minutes to round
         int hours = (int) Math.floor(time);
         int minutes = (int) Math.floor((time - hours) * 60);
-        String suffix = timeFormat.equals(H12) ? suffixes[(hours < 12 ? 0 : 1)] : "";
-        int hour = timeFormat.equals(H24) ? hours : ((hours + 12 - 1) % 12 + 1);
+        String suffix = timeFormat.equals(TimeFormat.H12) ? suffixes[(hours < 12 ? 0 : 1)] : "";
+        int hour = timeFormat.equals(TimeFormat.H24) ? hours : ((hours + 12 - 1) % 12 + 1);
         String twoDigitHour = twoDigitsFormat(hour);
         String twoDigitMinutes = twoDigitsFormat(minutes);
-        if (timeFormat.equals(ISO8601)) {
+        if (timeFormat.equals(TimeFormat.ISO8601)) {
             // Create temporary date object
             ZonedDateTime tempDate = date.withHour(hours).withMinute(minutes);
-            if (prayer.equals(MIDNIGHT)) {
+            if (prayer.equals(TimeName.MIDNIGHT)) {
                 if (hours >= 1 && hours < 12) {
                     tempDate = tempDate.plusDays(1);
                 }
@@ -314,11 +306,11 @@ public class PrayerTimes {
      * @param times prayer times
      */
     private void adjustHighLatitudes(Map<TimeName, Double> times) {
-        double nightTime = timeDiff(times.get(SUNSET), times.get(SUNRISE));
-        times.put(IMSAK, adjustHLTime(times.get(IMSAK), times.get(SUNRISE), evaluate(settings.get(IMSAK)), nightTime, "ccw"));
-        times.put(FAJR, adjustHLTime(times.get(FAJR), times.get(SUNRISE), evaluate(settings.get(FAJR)), nightTime, "ccw"));
-        times.put(ISHA, adjustHLTime(times.get(ISHA), times.get(SUNSET), evaluate(settings.get(ISHA)), nightTime));
-        times.put(MAGHRIB, adjustHLTime(times.get(MAGHRIB), times.get(SUNSET), evaluate(settings.get(MAGHRIB)), nightTime));
+        double nightTime = DateUtils.timeDiff(times.get(TimeName.SUNSET), times.get(TimeName.SUNRISE));
+        times.put(TimeName.IMSAK, adjustHLTime(times.get(TimeName.IMSAK), times.get(TimeName.SUNRISE), evaluate(settings.get(TimeName.IMSAK)), nightTime, "ccw"));
+        times.put(TimeName.FAJR, adjustHLTime(times.get(TimeName.FAJR), times.get(TimeName.SUNRISE), evaluate(settings.get(TimeName.FAJR)), nightTime, "ccw"));
+        times.put(TimeName.ISHA, adjustHLTime(times.get(TimeName.ISHA), times.get(TimeName.SUNSET), evaluate(settings.get(TimeName.ISHA)), nightTime));
+        times.put(TimeName.MAGHRIB, adjustHLTime(times.get(TimeName.MAGHRIB), times.get(TimeName.SUNSET), evaluate(settings.get(TimeName.MAGHRIB)), nightTime));
     }
 
     /**
@@ -343,7 +335,7 @@ public class PrayerTimes {
      */
     private double adjustHLTime(double time, double base, double angle, double night, String direction) {
         double portion = nightPortion(angle, night);
-        double timeDiff = ("ccw".equals(direction)) ? timeDiff(time, base) : timeDiff(base, time);
+        double timeDiff = ("ccw".equals(direction)) ? DateUtils.timeDiff(time, base) : DateUtils.timeDiff(base, time);
         if (Double.isNaN(time) || timeDiff > portion) {
             time = base + ("ccw".equals(direction) ? -portion : portion);
         }
@@ -385,7 +377,7 @@ public class PrayerTimes {
      * @return time integer
      */
     private double sunAngleTime(double angle, double time, String direction) {
-        double decl = sunPosition(julianDate + time).get(DECLINATION);
+        double decl = SunPosHelper.sunPosition(julianDate + time).get(DECLINATION);
         double noon = midDay(time);
         double p1 = -Trigonometry.sin(angle) - Trigonometry.sin(decl) * Trigonometry.sin(latitude);
         double p2 = Trigonometry.cos(decl) * Trigonometry.cos(latitude);
@@ -408,7 +400,7 @@ public class PrayerTimes {
      */
     private double asrTime(double factor, double time) {
         //double julianDate = gregorianToJulianDate();
-        double decl = sunPosition(julianDate + time).get(DECLINATION);
+        double decl = SunPosHelper.sunPosition(julianDate + time).get(DECLINATION);
         double angle = -Trigonometry.arccot(factor + Trigonometry.tan(Math.abs(latitude - decl)));
         return sunAngleTime(angle, time);
     }
@@ -419,7 +411,7 @@ public class PrayerTimes {
      * @return Noon as double value
      */
     private double midDay(double time) {
-        double eqt = sunPosition(julianDate + time).get(EQUATION_OF_TIME);
+        double eqt = SunPosHelper.sunPosition(julianDate + time).get(EQUATION_OF_TIME);
         return Trigonometry.fixHour(12 - eqt); // noon
     }
 
@@ -438,9 +430,9 @@ public class PrayerTimes {
                 put("latitude",latitude);
                 put("longitude",longitude);
                 put("timezone",date.format(DateTimeFormatter.ofPattern("zzz", Locale.forLanguageTag("en"))));
-                if (Objects.equals(method, MOONSIGHTING)) {
+                if (Objects.equals(method, Method.MOONSIGHTING)) {
                     put("latitudeAdjustmentMethod", NONE);
-                    method.getParams().put(SHAFAQ, shafaqMethod);
+                    method.getParams().put(TimeName.SHAFAQ, shafaqMethod);
                 }else {
                     put("latitudeAdjustmentMethod", latitudeAdjustmentMethod);
                 }
@@ -639,15 +631,15 @@ public class PrayerTimes {
         public void setOffset(int imsak, int fajr, int sunrise, int dhuhr, int asr, int maghrib, int sunset, int isha, int midnight) {
             offset = new HashMap<>(){
                 {
-                    put(IMSAK,imsak);
-                    put(FAJR, fajr);
-                    put(SUNRISE,sunrise);
-                    put(ZHUHR,dhuhr);
-                    put(ASR,asr);
-                    put(MAGHRIB,maghrib);
-                    put(SUNSET,sunset);
-                    put(ISHA,isha);
-                    put(MIDNIGHT,midnight);
+                    put(TimeName.IMSAK,imsak);
+                    put(TimeName.FAJR, fajr);
+                    put(TimeName.SUNRISE,sunrise);
+                    put(TimeName.ZHUHR,dhuhr);
+                    put(TimeName.ASR,asr);
+                    put(TimeName.MAGHRIB,maghrib);
+                    put(TimeName.SUNSET,sunset);
+                    put(TimeName.ISHA,isha);
+                    put(TimeName.MIDNIGHT,midnight);
                 }
             };
         }

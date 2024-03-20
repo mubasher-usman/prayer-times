@@ -1,4 +1,4 @@
-package org.mubasherusman.prayertimes.utils;
+package io.mubasherusman.prayertimes.utils;
 
 /**
  * Class Trigonometry contains Trigonometric Math functions

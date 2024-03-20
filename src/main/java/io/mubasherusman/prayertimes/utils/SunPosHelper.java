@@ -1,12 +1,12 @@
-package org.mubasherusman.prayertimes.utils;
+package io.mubasherusman.prayertimes.utils;
 
-import org.mubasherusman.prayertimes.constants.SunProperty;
+import io.mubasherusman.prayertimes.constants.SunProperty;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.mubasherusman.prayertimes.constants.SunProperty.DECLINATION;
-import static org.mubasherusman.prayertimes.constants.SunProperty.EQUATION_OF_TIME;
+import static io.mubasherusman.prayertimes.constants.SunProperty.DECLINATION;
+import static io.mubasherusman.prayertimes.constants.SunProperty.EQUATION_OF_TIME;
 
 /**
  * This helper class contains methods to find sun position
