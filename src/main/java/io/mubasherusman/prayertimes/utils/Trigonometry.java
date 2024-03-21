@@ -52,35 +52,77 @@ public class Trigonometry {
         return Math.tan(dtr(d));
     }
 
+    /**
+     * degree arcsin
+     * @param d Double
+     * @return degree
+     */
     public static double arcsin(double d) {
         return rtd(Math.asin(d));
     }
 
+    /**
+     * degree arccos
+     * @param d Double
+     * @return degree
+     */
     public static double arccos(double d) {
         return rtd(Math.acos(d));
     }
 
+    /**
+     * degree arctan
+     * @param d Double
+     * @return degree
+     */
     public static double arctan(double d) {
         return rtd(Math.atan(d));
     }
 
+    /**
+     * degree arccot
+     * @param x Double
+     * @return degree
+     */
     public static double arccot(double x) {
         return rtd(Math.atan(1.0 / x));
     }
 
+    /**
+     * degree arctan2
+     * @param x Double
+     * @param y Double
+     * @return degree
+     */
     public static double arctan2(double y, double x) {
         return rtd(Math.atan2(y, x));
     }
 
+    /**
+     * fixAngle
+     * @param a Double
+     * @return double value
+     */
     public static double fixAngle(double a) {
         return fix(a, 360);
     }
 
+    /**
+     * fixHour
+     * @param a Double
+     * @return double value
+     */
     public static double fixHour(double a) {
         return fix(a, 24);
     }
 
-    public static double fix(double a, double b) {
+    /**
+     * fix
+     * @param a Double
+     * @param b Double
+     * @return double value
+     */
+    private static double fix(double a, double b) {
         a = a - (b * (Math.floor(a / b)));
         return (a < 0) ? a + b : a;
     }

@@ -1,10 +1,10 @@
 package io.mubasherusman.prayertimes;
 
+import io.mubasherusman.prayertimes.moonsighting.TwilightMethod;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import io.mubasherusman.prayertimes.constants.Fiqh;
 import io.mubasherusman.prayertimes.constants.MidNightMode;
-import io.mubasherusman.prayertimes.moonsighting.ShafaqMethod;
 import io.mubasherusman.prayertimes.constants.TimeName;
 import io.mubasherusman.prayertimes.constants.LatAdjMethod;
 import io.mubasherusman.prayertimes.constants.Method;
@@ -30,7 +30,7 @@ public class PrayerTimeTests {
                 .latitudeAdjustmentMethod(LatAdjMethod.ANGLE_BASED)
                 .midnightMode(MidNightMode.STANDARD)
                 .timeFormat(TimeFormat.H24)
-                .shafaqMethod(ShafaqMethod.GENERAL)
+                .twilightMethod(TwilightMethod.GENERAL)
                 .build().computeTimes();
         Assertions.assertNotNull(times);
         Assertions.assertEquals(times.size(),11);
@@ -100,7 +100,7 @@ public class PrayerTimeTests {
                         LocalDateTime.of(2014,4,24,0,0,0),
                         ZoneId.of("Europe/London")))
                 .method(Method.MOONSIGHTING)
-                .shafaqMethod(ShafaqMethod.GENERAL)
+                .twilightMethod(TwilightMethod.GENERAL)
                 .build();
         Map<TimeName,Object> times = prayerTimes.computeTimes();
         Assertions.assertEquals("03:54", times.get(TimeName.IMSAK));

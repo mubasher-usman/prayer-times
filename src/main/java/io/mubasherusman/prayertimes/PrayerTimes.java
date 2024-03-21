@@ -27,19 +27,19 @@
  */
 package io.mubasherusman.prayertimes;
 
+import io.mubasherusman.prayertimes.constants.Fiqh;
+import io.mubasherusman.prayertimes.constants.LatAdjMethod;
 import io.mubasherusman.prayertimes.constants.Method;
 import io.mubasherusman.prayertimes.constants.MidNightMode;
 import io.mubasherusman.prayertimes.constants.TimeFormat;
 import io.mubasherusman.prayertimes.constants.TimeName;
 import io.mubasherusman.prayertimes.moonsighting.Fajr;
 import io.mubasherusman.prayertimes.moonsighting.Isha;
-import io.mubasherusman.prayertimes.moonsighting.ShafaqMethod;
+import io.mubasherusman.prayertimes.moonsighting.TwilightMethod;
+import io.mubasherusman.prayertimes.utils.CommonUtils;
 import io.mubasherusman.prayertimes.utils.DateUtils;
 import io.mubasherusman.prayertimes.utils.SunPosHelper;
 import io.mubasherusman.prayertimes.utils.Trigonometry;
-import io.mubasherusman.prayertimes.constants.Fiqh;
-import io.mubasherusman.prayertimes.constants.LatAdjMethod;
-import io.mubasherusman.prayertimes.utils.CommonUtils;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -50,9 +50,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
-import static io.mubasherusman.prayertimes.constants.LatAdjMethod.ANGLE_BASED;
-import static io.mubasherusman.prayertimes.constants.LatAdjMethod.NONE;
-import static io.mubasherusman.prayertimes.constants.LatAdjMethod.ONE_SEVENTH;
+import static io.mubasherusman.prayertimes.constants.LatAdjMethod.*;
 import static io.mubasherusman.prayertimes.constants.SunProperty.DECLINATION;
 import static io.mubasherusman.prayertimes.constants.SunProperty.EQUATION_OF_TIME;
 import static io.mubasherusman.prayertimes.utils.CommonUtils.evaluate;
@@ -60,31 +58,42 @@ import static io.mubasherusman.prayertimes.utils.CommonUtils.twoDigitsFormat;
 
 /**
  * PrayerTimes Class will calculate prayer times of current or any given date.
- * The mandatory settings for prayer times calculation is
- * Calculation-Method {@link Method} ,
- * School of Thought (Fiqh) {@link Fiqh} ,
-
- * Optional Params
- * Asar Shadow Factor. It Will override the default Shadow factors instructed by Fiqh.
- * Normally, You do not need to provide Asar Shadow Factor.
-
- * @author Mubasher Usman (mian.mubasherusman@gmail.com)
+ *
+ * <br><br>
+ * <p>To learn how islamic prayer times calculated,<br>
+ * please go to <a href="http://praytimes.org/wiki/Prayer_Times_Calculation">praytimes.org</a></p>
+ * <br>
+ * @author Mubasher Usman (mubasherusman@yahoo.com)
  */
 public class PrayerTimes {
     /**
      * If we're unable to calculate a time, we'll return this
      */
     private static final String INVALID_TIME = "-----";
+    /**
+     * Default Asar Shadow factor derived from Fiqh Enum value, However, this can be overridden with this variable.
+     */
     private final Double asrShadowFactor;
+    /**
+     * A Date with Zone information
+     */
     private final ZonedDateTime date;
+    /**
+     * Geo Coordinate's Latitude value
+     */
     private final Double latitude;
+    /**
+     * Geo Coordinate's Longitude value
+     */
     private final Double longitude;
-
+    /**
+     * Calculation Method - Default Muslim World League
+     */
     private Method method = Method.MWL;
     private Fiqh fiqh = Fiqh.STANDARD;
     private LatAdjMethod latitudeAdjustmentMethod = ANGLE_BASED;
     private TimeFormat timeFormat = TimeFormat.H24;
-    private ShafaqMethod shafaqMethod = ShafaqMethod.GENERAL;
+    private TwilightMethod twilightMethod = TwilightMethod.GENERAL;
     private MidNightMode midnightMode = MidNightMode.STANDARD;
     private Double elevation;
     private Map<TimeName, Integer> offset;
@@ -93,6 +102,7 @@ public class PrayerTimes {
     private final Double julianDate;
 
     /**
+     * Construct Prayer times based on given parameters
      * @param builder Builder
      */
     private PrayerTimes(Builder builder) {
@@ -109,12 +119,17 @@ public class PrayerTimes {
         elevation = builder.elevation == null ? 0 : 1 * elevation;
         julianDate = DateUtils.getJulianDate(date.getYear(), date.getMonthValue(), date.getDayOfMonth()) - longitude / (15.0 * 24.0);
         if(builder.midnightMode!=null) midnightMode = builder.midnightMode;
-        if(builder.shafaqMethod!=null) shafaqMethod = builder.shafaqMethod;
+        if(builder.twilightMethod !=null) twilightMethod = builder.twilightMethod;
         if(builder.timeFormat!=null) timeFormat = builder.timeFormat;
         if(builder.latitudeAdjustmentMethod!=null) latitudeAdjustmentMethod = builder.latitudeAdjustmentMethod;
         if(builder.offset!=null) offset = builder.offset;
     }
 
+    /**
+     * Set Method.
+     * In case of CUSTOM method it will set the customMethodParams given by {@link Builder}
+     * @param builder {@link Builder}
+     */
     private void setMethod(Builder builder) {
         if(builder.method!=null) {
             method = builder.method;
@@ -127,6 +142,9 @@ public class PrayerTimes {
         }
     }
 
+    /**
+     * Settings based on Calculation Method params
+     */
     private void loadSettings() {
         settings = new HashMap<>();
         Map<TimeName,Object> params = method.equals(Method.CUSTOM)? customMethodParams : method.getParams();
@@ -144,7 +162,8 @@ public class PrayerTimes {
 
     //--------------------------------------------------------------------------------------
     /**
-     * @return Map
+     * This will calculate the prayer times based on given parameters by {@link Builder}
+     * @return Prayer times as {@link Map} where key will be Name of Prayer and value will be time
      */
     public Map<TimeName, Object> computeTimes() {
         // default times
@@ -235,7 +254,7 @@ public class PrayerTimes {
         }
 
         // Reset Isha
-        Isha ishaMS = new Isha(date, latitude, shafaqMethod);
+        Isha ishaMS = new Isha(date, latitude, twilightMethod);
         times.put(TimeName.ISHA, times.get(TimeName.SUNSET) + (ishaMS.getMinutesAfterSunset() / 60));
     }
 
@@ -354,9 +373,10 @@ public class PrayerTimes {
             portion = 1.0 / 60.0 * angle;
         } else if (latitudeAdjustmentMethod.equals(ONE_SEVENTH)) {
             portion = 1.0 / 7.0;
-        } else {
-            // MIDDLE_OF_THE_NIGHT
+        } else if (latitudeAdjustmentMethod.equals(MIDDLE_OF_THE_NIGHT)){
             portion = 1.0 / 2.0;
+        } else {
+            throw new IllegalArgumentException("Value of latitudeAdjustmentMethod in invalid");
         }
         return portion * night;
     }
@@ -424,6 +444,11 @@ public class PrayerTimes {
     }
 
     //------------------------- Helper Meta data to used for calculation -------------------------
+
+    /**
+     * Gets meta data used for calculations
+     * @return Map
+     */
     public Map<String, Object> getMeta() {
         return new LinkedHashMap<>() {
             {
@@ -432,7 +457,7 @@ public class PrayerTimes {
                 put("timezone",date.format(DateTimeFormatter.ofPattern("zzz", Locale.forLanguageTag("en"))));
                 if (Objects.equals(method, Method.MOONSIGHTING)) {
                     put("latitudeAdjustmentMethod", NONE);
-                    method.getParams().put(TimeName.SHAFAQ, shafaqMethod);
+                    method.getParams().put(TimeName.SHAFAQ, twilightMethod);
                 }else {
                     put("latitudeAdjustmentMethod", latitudeAdjustmentMethod);
                 }
@@ -445,10 +470,18 @@ public class PrayerTimes {
     }
 
     //-----------------------------------------
+
+    /**
+     * Prayer times builder
+     * @return an instance of {@link Builder}
+     */
     public static Builder builder() {
         return new Builder();
     }
 
+    /**
+     * A convenient builder class to build Prayer Times {@link PrayerTimes} instance
+     */
     public static class Builder {
         private double latitude;
         private double longitude;
@@ -458,7 +491,7 @@ public class PrayerTimes {
         private Fiqh fiqh;
         private Double asarShadowFactor;
         private TimeFormat timeFormat;
-        private ShafaqMethod shafaqMethod;
+        private TwilightMethod twilightMethod;
         private LatAdjMethod latitudeAdjustmentMethod;
         private MidNightMode midnightMode;
         private Map<TimeName, Integer> offset;
@@ -560,13 +593,13 @@ public class PrayerTimes {
         }
 
         /**
-         * Sets the shafaq Method
+         * Sets the Twilight Method
          *
-         * @param shafaqMethod A {@link ShafaqMethod} instance.
+         * @param twilightMethod A {@link TwilightMethod} instance.
          * @return This builder.
          */
-        public Builder shafaqMethod(ShafaqMethod shafaqMethod) {
-            this.shafaqMethod = shafaqMethod;
+        public Builder twilightMethod(TwilightMethod twilightMethod) {
+            this.twilightMethod = twilightMethod;
             return this;
         }
 

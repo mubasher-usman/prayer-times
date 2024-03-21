@@ -24,7 +24,7 @@ public class MoonSightingTests {
         Isha esha = new Isha(
                 ZonedDateTime.of(
                         LocalDateTime.of(2014,4,24,0,0,0),
-                        ZoneId.of("Europe/London")),51.508515, ShafaqMethod.GENERAL);
+                        ZoneId.of("Europe/London")),51.508515, TwilightMethod.GENERAL);
         double value = esha.getMinutesAfterSunset();
         Assertions.assertEquals(69.0,value);
     }

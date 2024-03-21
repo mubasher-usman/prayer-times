@@ -6,31 +6,66 @@
 
     <groupId>io.github.mubasherusman</groupId>
     <artifactId>prayer-times</artifactId>
-    <version>2.0.0</version>
+    <version>1.0.1</version>
     <packaging>jar</packaging>
 
-    <properties>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
+    <name>Prayer Times</name>
+    <description>The most accurate yet simple islamic prayer times calculation library</description>
+    <url>https://github.com/mubasher-usman/prayer-times</url>
 
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.junit</groupId>
-                <artifactId>junit-bom</artifactId>
-                <version>5.10.2</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
+    <licenses>
+        <license>
+            <name>GNU Lesser General Public License version 3</name>
+            <url>https://www.gnu.org/licenses/lgpl-3.0.en.html</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>Mubasher Usman</name>
+            <email>4014673+mubasherusman@users.noreply.github.com</email>
+            <organization>mubasher-usman</organization>
+            <organizationUrl>https://github.com/mubasher-usman/prayer-times</organizationUrl>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git://github.com/mubasher-usman/prayer-times.git</connection>
+        <developerConnection>scm:git:ssh://github.com:mubasher-usman/prayer-times.git</developerConnection>
+        <url>http://github.com/mubasher-usman/prayer-times/tree/master</url>
+    </scm>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <jdk.version>11</jdk.version>
+
+        <maven.jar.version>3.3.0</maven.jar.version>
+        <maven.compiler.version>3.13.0</maven.compiler.version>
+        <maven.javadoc.version>3.6.3</maven.javadoc.version>
+        <maven.source.version>3.3.0</maven.source.version>
+        <maven.resources.version>3.3.1</maven.resources.version>
+        <maven.gpg.version>3.2.1</maven.gpg.version>
+        <surefire.plugin.version>3.2.5</surefire.plugin.version>
+
+        <surefire.useModulePath>false</surefire.useModulePath>
+        <surefire.argLine>
+            --illegal-access=debug
+        </surefire.argLine>
+    </properties>
 
     <dependencies>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
+            <version>5.10.2</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -39,9 +74,134 @@
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven.compiler.version}</version>
+                <configuration>
+                    <source>${jdk.version}</source>
+                    <target>${jdk.version}</target>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>${maven.resources.version}</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.2.5</version>
+                <version>${surefire.plugin.version}</version>
+                <configuration>
+                    <argLine>${surefire.argLine}</argLine>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>${maven.jar.version}</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                        </manifest>
+                        <!--<manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>-->
+                    </archive>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.5.3</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.maven.scm</groupId>
+                        <artifactId>maven-scm-provider-gitexe</artifactId>
+                        <version>1.9.5</version>
+                    </dependency>
+                </dependencies>
+                <configuration>
+                    <mavenExecutorId>forked-path</mavenExecutorId>
+                    <releaseProfiles>release</releaseProfiles>
+                    <autoVersionSubmodules>true</autoVersionSubmodules>
+                    <goals>deploy</goals>
+                </configuration>
             </plugin>
         </plugins>
     </build>
+    <profiles>
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <version>${maven.source.version}</version>
+                        <executions>
+                            <execution>
+                                <id>attach-sources</id>
+                                <goals>
+                                    <goal>jar-no-fork</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>${maven.javadoc.version}</version>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <source>${jdk.version}</source>
+                            <failOnError>true</failOnError>
+                            <failOnWarnings>false</failOnWarnings>
+                            <additionalOptions>-html5</additionalOptions>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>${maven.gpg.version}</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <gpgArguments>
+                                <arg>--pinentry-mode</arg>
+                                <arg>loopback</arg>
+                            </gpgArguments>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.sonatype.plugins</groupId>
+                        <artifactId>nexus-staging-maven-plugin</artifactId>
+                        <version>1.6.13</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <serverId>ossrh</serverId>
+                            <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
+                            <autoReleaseAfterClose>false</autoReleaseAfterClose>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>

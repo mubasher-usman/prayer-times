@@ -1,12 +1,21 @@
 package io.mubasherusman.prayertimes.constants;
 
-import io.mubasherusman.prayertimes.moonsighting.ShafaqMethod;
+import io.mubasherusman.prayertimes.moonsighting.TwilightMethod;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Calculation Methods
+ * <b>Calculation Method</b><br><br>
+ * <p>The mathematical side of how the calculation should work is generally agreed upon in the Islamic world.</p><br>
+ *
+ * <p>A calculation method is typically made up of the following:</p>
+  <ul>
+      <li>The Fajr Angle</li>
+      <li>The Maghrib Angle or minutes after sunset that Maghrib should be</li>
+      <li>The Isha Angle or minutes after Maghrib that Isha should be</li></ul>
+ * <p>To learn how islamic prayer times calculated,<br>
+ * please go to <a href="http://praytimes.org/wiki/Prayer_Times_Calculation">praytimes.org</a></p>
  */
 public enum Method {
     JAFARI(0,"Shia Ithna-Ashari, Leva Institute, Qum",new HashMap<>(){{
@@ -112,7 +121,7 @@ public enum Method {
         put("longitude", 55.9578555);
     }}),
     MOONSIGHTING(15,"Moonsighting Committee Worldwide (Moonsighting.com)",new HashMap<>(){{
-        put(TimeName.SHAFAQ, ShafaqMethod.GENERAL);
+        put(TimeName.SHAFAQ, TwilightMethod.GENERAL);
     }},null),
     DUBAI(16,"Dubai (experimental)",new HashMap<>(){{
         put(TimeName.FAJR, 18.2);

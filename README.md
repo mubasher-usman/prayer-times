@@ -18,7 +18,7 @@ The library is a maven package, so to use it, includes the maven dependency:
 
 ```maven
 <dependency>
-    <groupId>org.mubasherusman</groupId>
+    <groupId>io.github.mubasherusman</groupId>
     <artifactId>prayer-times</artifactId>
     <version>1.2.1</version>
 </dependency>
@@ -38,14 +38,14 @@ PrayerTimes prayerTimes = PrayerTimes.builder()
         .latitudeAdjustmentMethod(LatAdjMethod.ANGLE_BASED)
         .midnightMode(MidNightMode.STANDARD)
         .timeFormat(TimeFormat.H24)
-        .shafaqMethod(ShafaqMethod.GENERAL)
+        .twilightMethod(ShafaqMethod.GENERAL)
         .build();
 Map<DayTimeNames,Object> times = prayerTimes.computeTimes();
 ```
 
 ## Methods
 
-Supported methods can be seen @ https://github.com/mubasher-usman/prayer-times/blob/master/src/main/java/org/mubasherusman/prayertimes/constants/Method.java#L12.
+Supported methods can be seen @ https://github.com/mubasher-usman/prayer-times/blob/master/src/main/java/io/mubasherusman/prayertimes/constants/Method.java#L12.
 
 ### Understanding Methods
 
