@@ -4,8 +4,10 @@
 name: Continues Release and Deployment
 
 on:
-  release:
-    types: [created]
+ # release:
+  #  types: [created]
+  push:
+    branches: [ "master" ]
 
 jobs:
   build:
@@ -22,7 +24,7 @@ jobs:
       with:
         java-version: '11'
         distribution: 'temurin'
-        server-id: ossrh # Value of the distributionManagement/repository/id field of the pom.xml
+        server-id: central # Value of the distributionManagement/repository/id field of the pom.xml
         server-username: MAVEN_USERNAME #env variable for username in deploy
         server-password: MAVEN_PASSWORD #env variable for password in deploy
         gpg-private-key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }} # Value of the GPG private key to import

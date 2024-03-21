@@ -6,11 +6,11 @@
 # separate terms of service, privacy policy, and support
 # documentation.
 
-name: Continues Integration
+name: Build
 
 on:
-  push:
-    branches: [ "master" ]
+ # push:
+  #  branches: [ "master" ]
   pull_request:
     branches: [ "master" ]
 

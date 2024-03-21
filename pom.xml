@@ -24,9 +24,9 @@
     <developers>
         <developer>
             <name>Mubasher Usman</name>
-            <email>4014673+mubasherusman@users.noreply.github.com</email>
+            <email>mubasherusman@yahoo.com</email>
             <organization>mubasher-usman</organization>
-            <organizationUrl>https://github.com/mubasher-usman/prayer-times</organizationUrl>
+            <organizationUrl>https://github.com/mubasher-usman</organizationUrl>
         </developer>
     </developers>
 
@@ -35,13 +35,6 @@
         <developerConnection>scm:git:ssh://github.com:mubasher-usman/prayer-times.git</developerConnection>
         <url>http://github.com/mubasher-usman/prayer-times/tree/master</url>
     </scm>
-
-    <distributionManagement>
-        <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
-    </distributionManagement>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -162,12 +155,6 @@
                                 </goals>
                             </execution>
                         </executions>
-                        <configuration>
-                            <source>${jdk.version}</source>
-                            <failOnError>true</failOnError>
-                            <failOnWarnings>false</failOnWarnings>
-                            <additionalOptions>-html5</additionalOptions>
-                        </configuration>
                     </plugin>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
@@ -182,22 +169,16 @@
                                 </goals>
                             </execution>
                         </executions>
-                        <configuration>
-                            <gpgArguments>
-                                <arg>--pinentry-mode</arg>
-                                <arg>loopback</arg>
-                            </gpgArguments>
-                        </configuration>
                     </plugin>
                     <plugin>
-                        <groupId>org.sonatype.plugins</groupId>
-                        <artifactId>nexus-staging-maven-plugin</artifactId>
-                        <version>1.6.13</version>
+                        <groupId>org.sonatype.central</groupId>
+                        <artifactId>central-publishing-maven-plugin</artifactId>
+                        <version>0.4.0</version>
                         <extensions>true</extensions>
                         <configuration>
-                            <serverId>ossrh</serverId>
-                            <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
-                            <autoReleaseAfterClose>false</autoReleaseAfterClose>
+                            <publishingServerId>central</publishingServerId>
+                            <tokenAuth>true</tokenAuth>
+                            <checksums>required</checksums> <!--Only MD5 and SHA1 checksums will be generated.-->
                         </configuration>
                     </plugin>
                 </plugins>

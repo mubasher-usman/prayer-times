@@ -1,4 +1,4 @@
-[![CI](https://github.com/mubasher-usman/prayer-times/actions/workflows/maven.yml/badge.svg?branch=master)](https://github.com/mubasher-usman/prayer-times/actions/workflows/maven.yml)
+[![CI](https://github.com/mubasher-usman/prayer-times/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/mubasher-usman/prayer-times/actions/workflows/maven.yml)
 ![GitHub Release](https://img.shields.io/github/v/release/mubasher-usman/prayer-times)
 
 
@@ -9,7 +9,7 @@ This is Java edition of the Prayer Times Library (v2.3) originally written in Ja
 
 Hussain Ali Khan wrote its version 1 and available at http://praytimes.org/code/git/?a=tree&p=PrayTimes&hb=HEAD&f=v1/java,
 
-This is an improved, bug fixed and rewritten of version 1 with more calculation methods inspired from PHP edition https://github.com/islamic-network/prayer-times, 
+This is an improved, bug fixed and rewritten of version 1 with more calculation methods inspired from PHP edition https://github.com/islamic-network/prayer-times; 
 It has divulged much from the original since it was first written, so please don't use it as a 'like for like' substitute.
 
 ## How to Use this Library
@@ -20,7 +20,7 @@ The library is a maven package, so to use it, includes the maven dependency:
 <dependency>
     <groupId>io.github.mubasherusman</groupId>
     <artifactId>prayer-times</artifactId>
-    <version>1.2.1</version>
+    <version>1.0.1</version>
 </dependency>
 ```
 
