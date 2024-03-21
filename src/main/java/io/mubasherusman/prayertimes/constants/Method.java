@@ -18,6 +18,9 @@ import java.util.Map;
  * please go to <a href="http://praytimes.org/wiki/Prayer_Times_Calculation">praytimes.org</a></p>
  */
 public enum Method {
+    /**
+     * JAFARI
+     */
     JAFARI(0,"Shia Ithna-Ashari, Leva Institute, Qum",new HashMap<>(){{
         put(TimeName.FAJR, 16.0);
         put(TimeName.ISHA, 14.0);
@@ -27,6 +30,9 @@ public enum Method {
         put("latitude", 34.6415764);
         put("longitude", 50.8746035);
     }}),
+    /**
+     * KARACHI
+     */
     KARACHI(1,"University of Islamic Sciences, Karachi",new HashMap<>(){{
         put(TimeName.FAJR, 18.0);
         put(TimeName.ISHA, 18.0);
@@ -34,6 +40,9 @@ public enum Method {
         put("latitude", 24.8614622);
         put("longitude", 67.0099388);
     }}),
+    /**
+     * ISNA
+     */
     ISNA(2,"Islamic Society of North America (ISNA)",new HashMap<>(){{
         put(TimeName.FAJR, 15.0);
         put(TimeName.ISHA, 15.0);
@@ -41,6 +50,9 @@ public enum Method {
         put("latitude", 39.70421229999999);
         put("longitude", -86.39943869999999);
     }}),
+    /**
+     * MUSLIM WORLD LEAGUE
+     */
     MWL(3,"Muslim World League", new HashMap<>() {{
         put(TimeName.FAJR, 18.0);
         put(TimeName.ISHA, 17.0);
@@ -48,6 +60,9 @@ public enum Method {
         put("latitude", 51.5194682);
         put("longitude", -0.1360365);
     }}),
+    /**
+     * MAKKAH
+     */
     MAKKAH(4,"Umm Al-Qura University, Makkah",new HashMap<>(){{
         put(TimeName.FAJR, 18.5);
         put(TimeName.ISHA, "90 min");
@@ -55,6 +70,9 @@ public enum Method {
         put("latitude", 21.3890824);
         put("longitude", 39.8579118);
     }}),
+    /**
+     * EGYPT
+     */
     EGYPT(5,"Egyptian General Authority of Survey",new HashMap<>(){{
         put(TimeName.FAJR, 19.5);
         put(TimeName.ISHA, 17.5);
@@ -62,6 +80,9 @@ public enum Method {
         put("latitude", 30.0444196);
         put("longitude", 31.2357116);
     }}),
+    /**
+     * TEHRAN
+     */
     TEHRAN(7,"Institute of Geophysics, University of Tehran",new HashMap<>(){{
         put(TimeName.FAJR, 17.7);
         put(TimeName.ISHA, 14.0);
@@ -71,6 +92,9 @@ public enum Method {
         put("latitude", 35.6891975);
         put("longitude", 51.3889736);
     }}),
+    /**
+     * GULF
+     */
     GULF(8,"Gulf Region",new HashMap<>(){{
         put(TimeName.FAJR, 19.5);
         put(TimeName.ISHA, "90 min");
@@ -78,6 +102,9 @@ public enum Method {
         put("latitude", 24.1323638);
         put("longitude", 53.3199527);
     }}),
+    /**
+     * KUWAIT
+     */
     KUWAIT(9,"Kuwait",new HashMap<>(){{
         put(TimeName.FAJR, 18.0);
         put(TimeName.ISHA, 17.5);
@@ -85,6 +112,9 @@ public enum Method {
         put("latitude", 29.375859);
         put("longitude", 47.9774052);
     }}),
+    /**
+     * QATAR
+     */
     QATAR(10,"Qatar",new HashMap<>(){{
         put(TimeName.FAJR, 18.0);
         put(TimeName.ISHA, "90 min");
@@ -92,6 +122,9 @@ public enum Method {
         put("latitude", 25.2854473);
         put("longitude", 51.5310398);
     }}),
+    /**
+     * SINGAPORE
+     */
     SINGAPORE(11,"Majlis Ugama Islam Singapura, Singapore",new HashMap<>(){{
         put(TimeName.FAJR, 20.0);
         put(TimeName.ISHA, 18.0);
@@ -99,6 +132,9 @@ public enum Method {
         put("latitude", 1.352083);
         put("longitude", 103.819836);
     }}),
+    /**
+     * FRANCE
+     */
     FRANCE(12,"Union Organization Islamic de France",new HashMap<>(){{
         put(TimeName.FAJR, 12.0);
         put(TimeName.ISHA, 12.0);
@@ -106,6 +142,9 @@ public enum Method {
         put("latitude", 48.856614);
         put("longitude", 2.3522219);
     }}),
+    /**
+     * TURKEY
+     */
     TURKEY(13,"Diyanet İşleri Başkanlığı, Turkey (experimental)",new HashMap<>(){{
         put(TimeName.FAJR, 18.0);
         put(TimeName.ISHA, 17.0);
@@ -113,6 +152,9 @@ public enum Method {
         put("latitude", 39.9333635);
         put("longitude", 32.8597419);
     }}),
+    /**
+     * RUSSIA
+     */
     RUSSIA(14,"Spiritual Administration of Muslims of Russia",new HashMap<>(){{
         put(TimeName.FAJR, 16.0);
         put(TimeName.ISHA, 15.0);
@@ -120,9 +162,15 @@ public enum Method {
         put("latitude", 54.73479099999999);
         put("longitude", 55.9578555);
     }}),
+    /**
+     * MOON SIGHTING
+     */
     MOONSIGHTING(15,"Moonsighting Committee Worldwide (Moonsighting.com)",new HashMap<>(){{
         put(TimeName.SHAFAQ, TwilightMethod.GENERAL);
     }},null),
+    /**
+     * DUBAI
+     */
     DUBAI(16,"Dubai (experimental)",new HashMap<>(){{
         put(TimeName.FAJR, 18.2);
         put(TimeName.ISHA, 18.2);
@@ -130,6 +178,9 @@ public enum Method {
         put("latitude", 25.0762677);
         put("longitude", 55.087404);
     }}),
+    /**
+     * JAKIM
+     */
     JAKIM(17,"Jabatan Kemajuan Islam Malaysia (JAKIM)",new HashMap<>(){{
         put(TimeName.FAJR, 20.0);
         put(TimeName.ISHA, 18.0);
@@ -137,6 +188,9 @@ public enum Method {
         put("latitude", 3.139003);
         put("longitude", 101.686855);
     }}),
+    /**
+     * TUNISIA
+     */
     TUNISIA(18,"Tunisia",new HashMap<>(){{
         put(TimeName.FAJR, 18.0);
         put(TimeName.ISHA, 18.0);
@@ -144,6 +198,9 @@ public enum Method {
         put("latitude", 36.8064948);
         put("longitude", 10.1815316);
     }}),
+    /**
+     * ALGERIA
+     */
     ALGERIA(19,"Algeria",new HashMap<>(){{
         put(TimeName.FAJR, 18.0);
         put(TimeName.ISHA, 17.0);
@@ -151,6 +208,9 @@ public enum Method {
         put("latitude", 36.753768);
         put("longitude", 3.0587561);
     }}),
+    /**
+     * KEMENAG
+     */
     KEMENAG(20,"Kementerian Agama Republik Indonesia",new HashMap<>(){{
         put(TimeName.FAJR, 20.0);
         put(TimeName.ISHA, 18.0);
@@ -158,6 +218,9 @@ public enum Method {
         put("latitude", -6.2087634);
         put("longitude", 106.845599);
     }}),
+    /**
+     * MOROCCO
+     */
     MOROCCO(21,"Morocco",new HashMap<>(){{
         put(TimeName.FAJR, 19.0);
         put(TimeName.ISHA, 17.0);
@@ -165,6 +228,9 @@ public enum Method {
         put("latitude", 33.9715904);
         put("longitude", -6.8498129);
     }}),
+    /**
+     * PORTUGAL
+     */
     PORTUGAL(22,"Comunidade Islamica de Lisboa",new HashMap<>(){{
         put(TimeName.FAJR, 18.0);
         put(TimeName.MAGHRIB, "3 min");
@@ -173,6 +239,9 @@ public enum Method {
         put("latitude", 38.7222524);
         put("longitude", -9.1393366);
     }}),
+    /**
+     * JORDAN
+     */
     JORDAN(23,"Ministry of Awqaf, Islamic Affairs and Holy Places, Jordan",new HashMap<>(){{
         put(TimeName.FAJR, 18.0);
         put(TimeName.MAGHRIB, "5 min");
@@ -181,6 +250,9 @@ public enum Method {
         put("latitude", 31.9461222);
         put("longitude", 35.923844);
     }}),
+    /**
+     * CUSTOM
+     */
     CUSTOM(99,"Custom",new HashMap<>(){{
         put(TimeName.FAJR, 15.0);
         put(TimeName.ISHA, 15.0);
@@ -192,6 +264,13 @@ public enum Method {
     private Map<TimeName, Object> params;
     private Map<String, Double> location;
 
+    /**
+     * Constructor
+     * @param id id
+     * @param name descriptive name
+     * @param params parameters
+     * @param location optional location coordinates
+     */
     Method(Integer id,
            String name,
            Map<TimeName, Object> params,
@@ -229,11 +308,13 @@ public enum Method {
         this.params.put(TimeName.ISHA, angleOrMinsAfterMaghrib);
     }
 
+    /**
+     * Get Value of Method parameters
+     * @return an instance of {@link Map}
+     */
     public Map<TimeName, Object> getParams() {
         return this.equals(CUSTOM) || this.equals(MOONSIGHTING)? new HashMap<>(params): Map.copyOf(params);
     }
-
-
 }
 
 

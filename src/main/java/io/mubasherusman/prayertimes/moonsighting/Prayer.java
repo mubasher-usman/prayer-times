@@ -29,6 +29,11 @@ public class Prayer {
      */
     private static final String DYY_SOUTH_0 = "06-21";
 
+    /**
+     * Constructor
+     * @param date the date
+     * @param latitude coordinates
+     */
     public Prayer(ZonedDateTime date, double latitude) {
         this.date = date;
         this.latitude = latitude;

@@ -4,5 +4,24 @@ package io.mubasherusman.prayertimes.constants;
  * Prayer times out put format
  */
 public enum TimeFormat {
-    H24, H12, HNS24, DECIMAL, ISO8601
+    /**
+     * 24 Hours
+     */
+    H24,
+    /**
+     * 12 Hours
+     */
+    H12,
+    /**
+     * 12 Hrs NS
+     */
+    HNS24,
+    /**
+     * Decimal
+     */
+    DECIMAL,
+    /**
+     * ISO date format
+     */
+    ISO8601
 }

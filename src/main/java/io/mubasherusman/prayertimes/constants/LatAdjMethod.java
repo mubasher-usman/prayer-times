@@ -7,8 +7,20 @@ package io.mubasherusman.prayertimes.constants;
  * @author Mubasher Usman
  */
 public enum LatAdjMethod {
+    /**
+     * MIDDLE_OF_THE_NIGHT
+     */
     MIDDLE_OF_THE_NIGHT,
+    /**
+     * ANGLE_BASED
+     */
     ANGLE_BASED,
+    /**
+     * ONE_SEVENTH
+     */
     ONE_SEVENTH,
+    /**
+     * NONE
+     */
     NONE
 }

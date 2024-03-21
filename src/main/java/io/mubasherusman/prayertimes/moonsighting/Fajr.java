@@ -7,6 +7,11 @@ import java.time.ZonedDateTime;
  * <a href="https://www.moonsighting.com/how-we.html"><b>Moonsighting Committee Worldwide (MCW)</b></a>
  */
 public class Fajr extends Prayer {
+    /**
+     * Construct Fajar
+     * @param date the date
+     * @param latitude the coordinates
+     */
     public Fajr(ZonedDateTime date, double latitude) {
         super(date, latitude);
         this.a = 75 + 28.65 / 55 * Math.abs(this.latitude);
@@ -15,6 +20,10 @@ public class Fajr extends Prayer {
         this.d = 75 + 48.1 / 55 * Math.abs(this.latitude);
     }
 
+    /**
+     * Get Fajar minutes
+     * @return as double value
+     */
     public double getMinutesBeforeSunrise() {
         return Math.round(this.getMinutes());
     }

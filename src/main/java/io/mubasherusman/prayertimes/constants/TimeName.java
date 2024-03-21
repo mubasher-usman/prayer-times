@@ -5,17 +5,53 @@ package io.mubasherusman.prayertimes.constants;
  * Some portions are used for mandatory prayers, and some are used to identify sunnah prayers.
  */
 public enum TimeName {
+    /**
+     * IMSAK
+     */
     IMSAK("Imsak"),
+    /**
+     * FAJAR prayer
+     */
     FAJR("Fajr"),
+    /**
+     * SUNRISE
+     */
     SUNRISE("Sunrise"),
+    /**
+     * ZUHAR prayer
+     */
     ZHUHR("Dhuhr"),
+    /**
+     * ASAR prayer
+     */
     ASR("Asr"),
+    /**
+     * SUNSET
+     */
     SUNSET("Sunset"),
+    /**
+     * MAGHRIB prayer
+     */
     MAGHRIB("Maghrib"),
+    /**
+     * ESHA prayer
+     */
     ISHA("Isha"),
+    /**
+     * Twilight
+     */
     SHAFAQ("shafaq"),
+    /**
+     * Mid of the night
+     */
     MIDNIGHT("Midnight"),
+    /**
+     * FIRST THIRD of Night
+     */
     FIRST_THIRD("Firstthird"),
+    /**
+     * Last part of night
+     */
     LAST_THIRD("Lastthird");
 
     private final String name;

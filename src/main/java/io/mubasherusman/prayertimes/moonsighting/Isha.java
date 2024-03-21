@@ -8,6 +8,12 @@ import java.time.ZonedDateTime;
  */
 public class Isha extends Prayer {
 
+    /**
+     * Construct Isha
+     * @param date the date
+     * @param latitude coordinates
+     * @param twilightMethod The {@link TwilightMethod}
+     */
     public Isha(ZonedDateTime date, double latitude, TwilightMethod twilightMethod) {
         super(date, latitude);
         setShafaq(twilightMethod);
@@ -36,6 +42,10 @@ public class Isha extends Prayer {
         }
     }
 
+    /**
+     * Get minutes
+     * @return float
+     */
     public float getMinutesAfterSunset() {
         return (int) Math.round(this.getMinutes());
     }
